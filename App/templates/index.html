@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Performance Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main_css.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Student Performance Prediction</h1>
+
+        <form action="/predict" method="post">
+            <div class="form-group">
+                <label for="studytime">Study Time (hours):</label>
+                <input type="number" step="any" name="studytime" placeholder="Enter study time (hours)" required>
+            </div>
+
+            <div class="form-group">
+                <label for="failures">Number of Past Failures:</label>
+                <input type="number" step="1" name="failures" placeholder="Enter number of past failures" required>
+            </div>
+
+            <div class="form-group">
+                <label for="absences">Absences (Number of classes missed):</label>
+                <input type="number" step="1" name="absences" placeholder="Enter number of absences" required>
+            </div>
+
+            <div class="form-group">
+                <label for="G1">First Period Grade (G1):</label>
+                <input type="number" step="any" name="G1" placeholder="Enter G1 grade" required>
+            </div>
+
+            <div class="form-group">
+                <label for="G2">Second Period Grade (G2):</label>
+                <input type="number" step="any" name="G2" placeholder="Enter G2 grade" required>
+            </div>
+
+            <button type="submit" class="btn">Predict</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="result">
+                <h2>{{ prediction_text }}</h2>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
