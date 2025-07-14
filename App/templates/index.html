@@ -1,47 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Student Performance Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main_css.css') }}">
+    <title>🎓 Student Performance Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fb;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input[type=number] {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0 16px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        input[type=submit] {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type=submit]:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 1rem;
+            background-color: #eafaf1;
+            border-left: 5px solid #2ecc71;
+            border-radius: 6px;
+        }
+        .inputs {
+            margin-top: 10px;
+            padding: 1rem;
+            background: #f2f2f2;
+            border-left: 5px solid #ccc;
+            border-radius: 6px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎓 Student Performance Prediction</h1>
+        <h2>🎓 Student Performance Prediction</h2>
+        <form method="POST" action="/predict">
+            <label>Study Time (hours):</label>
+            <input type="number" name="studytime" step="any" required>
 
-        <form action="/predict" method="post">
-            <div class="form-group">
-                <label for="studytime">Study Time (hours):</label>
-                <input type="number" step="any" name="studytime" placeholder="Enter study time (hours)" required>
-            </div>
+            <label>Number of Past Failures:</label>
+            <input type="number" name="failures" required>
 
-            <div class="form-group">
-                <label for="failures">Number of Past Failures:</label>
-                <input type="number" step="1" name="failures" placeholder="Enter number of past failures" required>
-            </div>
+            <label>Absences (Number of classes missed):</label>
+            <input type="number" name="absences" required>
 
-            <div class="form-group">
-                <label for="absences">Absences (Number of classes missed):</label>
-                <input type="number" step="1" name="absences" placeholder="Enter number of absences" required>
-            </div>
+            <label>First Period Grade (G1):</label>
+            <input type="number" name="G1" required>
 
-            <div class="form-group">
-                <label for="G1">First Period Grade (G1):</label>
-                <input type="number" step="any" name="G1" placeholder="Enter G1 grade" required>
-            </div>
+            <label>Second Period Grade (G2):</label>
+            <input type="number" name="G2" required>
 
-            <div class="form-group">
-                <label for="G2">Second Period Grade (G2):</label>
-                <input type="number" step="any" name="G2" placeholder="Enter G2 grade" required>
-            </div>
-
-            <button type="submit" class="btn">Predict</button>
+            <input type="submit" value="Predict">
         </form>
 
         {% if prediction_text %}
-            <div class="result">
-                <h2>{{ prediction_text }}</h2>
-            </div>
+        <div class="result">
+            <strong>{{ prediction_text }}</strong>
+        </div>
+
+        <div class="inputs">
+            <h4>Your Inputs:</h4>
+            <ul>
+                <li><strong>Study Time:</strong> {{ studytime }}</li>
+                <li><strong>Failures:</strong> {{ failures }}</li>
+                <li><strong>Absences:</strong> {{ absences }}</li>
+                <li><strong>G1 Grade:</strong> {{ G1 }}</li>
+                <li><strong>G2 Grade:</strong> {{ G2 }}</li>
+            </ul>
+        </div>
         {% endif %}
     </div>
 </body>

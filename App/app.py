@@ -7,8 +7,7 @@ app = Flask(__name__)
 # Load the trained model
 model = joblib.load('model/fine_tune.pkl')
 
-# Manually define mean and std for each feature (from preprocessing step)
-# ➔ You need to replace these values with the actual mean and std from your training data
+# Manually define mean and std for each feature (replace with your actual values)
 feature_means = {
     'studytime': 2.5,
     'failures': 0.3,
@@ -34,36 +33,41 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get inputs
+        # Get inputs from form
         studytime = float(request.form['studytime'])
         failures = float(request.form['failures'])
         absences = float(request.form['absences'])
         G1 = float(request.form['G1'])
         G2 = float(request.form['G2'])
 
-        # Feature engineering
+        # Derived features
         avg_grade = (G1 + G2) / 2
         studytime_level = 0 if studytime < 2 else 1
 
-        # Manual scaling (same as StandardScaler)
-        def scale(value, mean, std):
-            return (value - mean) / std
+        # Manual scaling (equivalent to StandardScaler)
+        def scale(val, mean, std):
+            return (val - mean) / std
 
-        studytime_scaled = scale(studytime, feature_means['studytime'], feature_stds['studytime'])
-        failures_scaled = scale(failures, feature_means['failures'], feature_stds['failures'])
-        absences_scaled = scale(absences, feature_means['absences'], feature_stds['absences'])
-        G1_scaled = scale(G1, feature_means['G1'], feature_stds['G1'])
-        G2_scaled = scale(G2, feature_means['G2'], feature_stds['G2'])
-        avg_grade_scaled = scale(avg_grade, feature_means['avg_grade'], feature_stds['avg_grade'])
+        features_scaled = [
+            scale(studytime, feature_means['studytime'], feature_stds['studytime']),
+            scale(failures, feature_means['failures'], feature_stds['failures']),
+            scale(absences, feature_means['absences'], feature_stds['absences']),
+            scale(G1, feature_means['G1'], feature_stds['G1']),
+            scale(G2, feature_means['G2'], feature_stds['G2']),
+            scale(avg_grade, feature_means['avg_grade'], feature_stds['avg_grade']),
+            studytime_level  # no scaling for binary feature
+        ]
 
-        # Final feature array (⚠ Order must match training!)
-        features = np.array([[studytime_scaled, failures_scaled, absences_scaled, G1_scaled, G2_scaled, avg_grade_scaled, studytime_level]])
+        prediction = model.predict([features_scaled])[0]
+        result = "✅ Pass" if prediction == 1 else "❌ Fail"
 
-        # Predict
-        prediction = model.predict(features)[0]
-        result = "Pass" if prediction == 1 else "Fail"
-
-        return render_template('index.html', prediction_text=f"The student is likely to: {result}")
+        return render_template('index.html',
+                               prediction_text=f"The student is likely to: {result}",
+                               studytime=studytime,
+                               failures=failures,
+                               absences=absences,
+                               G1=G1,
+                               G2=G2)
 
     except Exception as e:
         return render_template('index.html', prediction_text=f"Error: {str(e)}")
