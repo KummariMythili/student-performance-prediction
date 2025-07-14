@@ -1,0 +1,15 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+.navbar {
+  margin-bottom: 20px;
+}
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+}

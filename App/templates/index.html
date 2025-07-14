@@ -1,105 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>🎓 Student Performance Prediction</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f9fb;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: #fff;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #2c3e50;
-        }
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
-        input[type=number] {
-            width: 100%;
-            padding: 10px;
-            margin: 6px 0 16px 0;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-        input[type=submit] {
-            width: 100%;
-            padding: 12px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        input[type=submit]:hover {
-            background-color: #2980b9;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 1rem;
-            background-color: #eafaf1;
-            border-left: 5px solid #2ecc71;
-            border-radius: 6px;
-        }
-        .inputs {
-            margin-top: 10px;
-            padding: 1rem;
-            background: #f2f2f2;
-            border-left: 5px solid #ccc;
-            border-radius: 6px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Student Performance Predictor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h2>🎓 Student Performance Prediction</h2>
-        <form method="POST" action="/predict">
-            <label>Study Time (hours):</label>
-            <input type="number" name="studytime" step="any" required>
 
-            <label>Number of Past Failures:</label>
-            <input type="number" name="failures" required>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="/">🎓 Student Predictor</a>
+  </div>
+</nav>
 
-            <label>Absences (Number of classes missed):</label>
-            <input type="number" name="absences" required>
+<!-- Hero Section -->
+<header class="bg-light py-5 text-center">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Predict Student Performance Instantly</h1>
+    <p class="lead">Empowering academic success through intelligent prediction and insights.</p>
+    <img src="{{ url_for('static', filename='assets/img/spp.jpg') }}" 
+         alt="Hero Image" 
+         class="img-fluid rounded mt-3" 
+         style="max-height: 300px;">
+  </div>
+</header>
 
-            <label>First Period Grade (G1):</label>
-            <input type="number" name="G1" required>
+<!-- Input Form Section -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">📊 Student Data Input Form</h2>
+    <form method="POST" action="/predict" class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Study Time (hours)</label>
+        <input type="number" name="studytime" step="any" class="form-control" required>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Failures</label>
+        <input type="number" name="failures" step="any" class="form-control" required>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Absences</label>
+        <input type="number" name="absences" step="any" class="form-control" required>
+      </div>
+      <div class="col-12">
+        <label class="form-label">G1 (First Grade)</label>
+        <input type="number" name="G1" step="any" class="form-control" required>
+      </div>
+      <div class="col-12">
+        <label class="form-label">G2 (Second Grade)</label>
+        <input type="number" name="G2" step="any" class="form-control" required>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-success w-100">🔍 Predict</button>
+      </div>
+    </form>
 
-            <label>Second Period Grade (G2):</label>
-            <input type="number" name="G2" required>
-
-            <input type="submit" value="Predict">
-        </form>
-
-        {% if prediction_text %}
-        <div class="result">
-            <strong>{{ prediction_text }}</strong>
-        </div>
-
-        <div class="inputs">
-            <h4>Your Inputs:</h4>
-            <ul>
-                <li><strong>Study Time:</strong> {{ studytime }}</li>
-                <li><strong>Failures:</strong> {{ failures }}</li>
-                <li><strong>Absences:</strong> {{ absences }}</li>
-                <li><strong>G1 Grade:</strong> {{ G1 }}</li>
-                <li><strong>G2 Grade:</strong> {{ G2 }}</li>
-            </ul>
-        </div>
-        {% endif %}
+    {% if prediction is not none %}
+    <div class="alert alert-info mt-5">
+      <h4>📌 Prediction Result: <strong>{{ prediction }}</strong></h4>
+      <p class="mb-1"><strong>Your Input Data:</strong></p>
+      <ul>
+        <li>Study Time: {{ studytime }}</li>
+        <li>Failures: {{ failures }}</li>
+        <li>Absences: {{ absences }}</li>
+        <li>G1: {{ g1 }}</li>
+        <li>G2: {{ g2 }}</li>
+      </ul>
     </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- About Us Section -->
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">About Us</h2>
+    <p class="text-center">We are dedicated to using data-driven insights to help educators and students predict academic performance early and accurately.</p>
+    <div class="row mt-4">
+      <div class="col-md-4 text-center">
+        <h5>📈 Performance Analysis</h5>
+        <p>Use study data to forecast pass/fail outcomes and provide early support.</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <h5>📚 Academic Support</h5>
+        <p>Identify at-risk students and personalize interventions to improve success rates.</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <h5>🔐 Secure & Confidential</h5>
+        <p>Your data is processed locally and never shared externally.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Understanding the Fields Section -->
+<section class="py-5 bg-white border-top">
+  <div class="container">
+    <h2 class="text-center mb-4">🧠 Understanding the Fields</h2>
+    <ul class="list-group list-group-flush fs-5">
+      <li class="list-group-item">
+        <strong>Study Time:</strong> Number of hours the student studies per week. More study time can indicate better preparation and performance.
+      </li>
+      <li class="list-group-item">
+        <strong>Failures:</strong> Number of past class failures. Higher failures may correlate with lower academic success.
+      </li>
+      <li class="list-group-item">
+        <strong>Absences:</strong> Total number of school absences. Frequent absences may negatively affect performance.
+      </li>
+      <li class="list-group-item">
+        <strong>G1 (First Grade):</strong> The student’s grade in the first period. It's an early performance indicator.
+      </li>
+      <li class="list-group-item">
+        <strong>G2 (Second Grade):</strong> The student’s grade in the second period. Strongly predictive of the final outcome.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-primary text-white text-center py-3">
+  &copy; 2025 Student Performance Predictor | Built with ❤️
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
 </body>
 </html>
