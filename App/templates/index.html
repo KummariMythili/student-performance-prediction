@@ -16,63 +16,23 @@
   </div>
 </nav>
 
-<!-- Hero Section -->
-<header class="bg-light py-5 text-center">
+<!-- Hero Section with image beside text -->
+<header class="bg-light py-5">
   <div class="container">
-    <h1 class="display-5 fw-bold">Predict Student Performance Instantly</h1>
-    <p class="lead">Empowering academic success through intelligent prediction and insights.</p>
-    <img src="{{ url_for('static', filename='assets/img/spp.jpg') }}" 
-         alt="Hero Image" 
-         class="img-fluid rounded mt-3" 
-         style="max-height: 300px;">
+    <div class="row align-items-center">
+      <div class="col-md-7 text-center text-md-start">
+        <h1 class="display-5 fw-bold">Predict Student Performance Instantly</h1>
+        <p class="lead">Empowering academic success through intelligent prediction and insights.</p>
+      </div>
+      <div class="col-md-5 text-center">
+        <img src="{{ url_for('static', filename='assets/img/spp.jpg') }}" 
+             alt="Hero Image" 
+             class="img-fluid rounded" 
+             style="max-height: 250px;">
+      </div>
+    </div>
   </div>
 </header>
-
-<!-- Input Form Section -->
-<section class="py-5">
-  <div class="container">
-    <h2 class="text-center mb-4">📊 Student Data Input Form</h2>
-    <form method="POST" action="/predict" class="row g-3">
-      <div class="col-12">
-        <label class="form-label">Study Time (hours)</label>
-        <input type="number" name="studytime" step="any" class="form-control" required>
-      </div>
-      <div class="col-12">
-        <label class="form-label">Failures</label>
-        <input type="number" name="failures" step="any" class="form-control" required>
-      </div>
-      <div class="col-12">
-        <label class="form-label">Absences</label>
-        <input type="number" name="absences" step="any" class="form-control" required>
-      </div>
-      <div class="col-12">
-        <label class="form-label">G1 (First Grade)</label>
-        <input type="number" name="G1" step="any" class="form-control" required>
-      </div>
-      <div class="col-12">
-        <label class="form-label">G2 (Second Grade)</label>
-        <input type="number" name="G2" step="any" class="form-control" required>
-      </div>
-      <div class="col-12">
-        <button type="submit" class="btn btn-success w-100">🔍 Predict</button>
-      </div>
-    </form>
-
-    {% if prediction is not none %}
-    <div class="alert alert-info mt-5">
-      <h4>📌 Prediction Result: <strong>{{ prediction }}</strong></h4>
-      <p class="mb-1"><strong>Your Input Data:</strong></p>
-      <ul>
-        <li>Study Time: {{ studytime }}</li>
-        <li>Failures: {{ failures }}</li>
-        <li>Absences: {{ absences }}</li>
-        <li>G1: {{ g1 }}</li>
-        <li>G2: {{ g2 }}</li>
-      </ul>
-    </div>
-    {% endif %}
-  </div>
-</section>
 
 <!-- About Us Section -->
 <section class="bg-light py-5">
@@ -96,27 +56,75 @@
   </div>
 </section>
 
-<!-- Understanding the Fields Section -->
-<section class="py-5 bg-white border-top">
+<!-- Form + Understanding Side by Side -->
+<section class="py-5">
   <div class="container">
-    <h2 class="text-center mb-4">🧠 Understanding the Fields</h2>
-    <ul class="list-group list-group-flush fs-5">
-      <li class="list-group-item">
-        <strong>Study Time:</strong> Number of hours the student studies per week. More study time can indicate better preparation and performance.
-      </li>
-      <li class="list-group-item">
-        <strong>Failures:</strong> Number of past class failures. Higher failures may correlate with lower academic success.
-      </li>
-      <li class="list-group-item">
-        <strong>Absences:</strong> Total number of school absences. Frequent absences may negatively affect performance.
-      </li>
-      <li class="list-group-item">
-        <strong>G1 (First Grade):</strong> The student’s grade in the first period. It's an early performance indicator.
-      </li>
-      <li class="list-group-item">
-        <strong>G2 (Second Grade):</strong> The student’s grade in the second period. Strongly predictive of the final outcome.
-      </li>
-    </ul>
+    <div class="row g-5">
+      <!-- Prediction Form -->
+      <div class="col-md-6">
+        <h2 class="mb-4">📊 Student Data Input Form</h2>
+        <form method="POST" action="/predict">
+          <div class="mb-3">
+            <label class="form-label">Study Time (hours)</label>
+            <input type="number" name="studytime" step="any" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Failures</label>
+            <input type="number" name="failures" step="any" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Absences</label>
+            <input type="number" name="absences" step="any" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">G1 (First Grade)</label>
+            <input type="number" name="G1" step="any" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">G2 (Second Grade)</label>
+            <input type="number" name="G2" step="any" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <button type="submit" class="btn btn-success w-100">🔍 Predict</button>
+          </div>
+        </form>
+
+        {% if prediction is not none %}
+        <div class="alert alert-info mt-4">
+          <h4>📌 Prediction Result: <strong>{{ prediction }}</strong></h4>
+          <ul>
+            <li>Study Time: {{ studytime }}</li>
+            <li>Failures: {{ failures }}</li>
+            <li>Absences: {{ absences }}</li>
+            <li>G1: {{ g1 }}</li>
+            <li>G2: {{ g2 }}</li>
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Understanding the Fields -->
+      <div class="col-md-6">
+        <h2 class="mb-4">🧠 Understanding the Fields</h2>
+        <ul class="list-group list-group-flush fs-6">
+          <li class="list-group-item">
+            <strong>Study Time:</strong> Number of hours the student studies per week. More study time can indicate better preparation and performance.
+          </li>
+          <li class="list-group-item">
+            <strong>Failures:</strong> Number of past class failures. Higher failures may correlate with lower academic success.
+          </li>
+          <li class="list-group-item">
+            <strong>Absences:</strong> Total number of school absences. Frequent absences may negatively affect performance.
+          </li>
+          <li class="list-group-item">
+            <strong>G1 (First Grade):</strong> The student’s grade in the first period. It's an early performance indicator.
+          </li>
+          <li class="list-group-item">
+            <strong>G2 (Second Grade):</strong> The student’s grade in the second period. Strongly predictive of the final outcome.
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
